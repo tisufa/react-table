@@ -1,18 +1,75 @@
+import { useEffect, useState } from "react";
+import { InputSearch } from "./InputSearch";
+
 const Table = ({ model, actionButtons }) => {
+  const [state, setState] = useState({
+    records: [],
+    keywords: "",
+  });
+
+  useEffect(() => {
+    resolveClientRecords();
+  }, [model.records, state.keywords]);
+
+  const resolveClientRecords = () => {
+    let records = Array.from(model.records || []);
+    records = searchRecords(records);
+    setState((prev) => ({
+      ...prev,
+      records,
+    }));
+  };
+
+  const searchRecords = (records) => {
+    return records.filter((record) => {
+      for (const column of model.columns) {
+        let value = "";
+        if (column?.callbacks?.createValue) {
+          value = column.callbacks.createValue({ record });
+        } else {
+          value = record[column.field];
+        }
+        if (
+          String(value)
+            .toLowerCase()
+            .includes(state.keywords.toLocaleLowerCase())
+        ) {
+          return true;
+        }
+      }
+      return false;
+    });
+  };
+
   const renderColumn = (record, column) => {
     let value = null;
-    if (column.field) value = record[column.field];
+    if (column?.callbacks?.createValue) {
+      value = column.callbacks.createValue({ record });
+    } else if (column.field) {
+      value = record[column.field];
+    }
     return column.component
       ? column.component({
           record,
           value,
         })
-      : record[column.field];
+      : value;
+  };
+
+  const handleSearch = (keywords) => {
+    setState((prev) => ({
+      ...prev,
+      keywords,
+    }));
   };
 
   return (
     <div className="table-wrapper">
-      <div className="table-header">{/* TODO: Add Filter/Search */}</div>
+      <div className="table-header px-3 pt-3">
+        <div className="flex justify-end">
+          <InputSearch onSearch={handleSearch} />
+        </div>
+      </div>
       <div className="table-body overflow-auto">
         <table className="w-full">
           <thead>
@@ -34,7 +91,7 @@ const Table = ({ model, actionButtons }) => {
             </tr>
           </thead>
           <tbody>
-            {model.records.map((record, i) => (
+            {state.records.map((record, i) => (
               <tr
                 className="text-left odd:bg-slate-100 hover:bg-slate-200 transition-all duration-300"
                 key={i + 1}
@@ -65,4 +122,3 @@ const Table = ({ model, actionButtons }) => {
 };
 
 export { Table };
-
