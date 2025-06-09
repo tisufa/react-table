@@ -1,5 +1,4 @@
-const Table = ({ model }) => {
-  console.log(model);
+const Table = ({ model, actionButtons }) => {
   return (
     <div className="table-wrapper">
       <div className="table-header">{/* TODO: Add Filter/Search */}</div>
@@ -16,7 +15,11 @@ const Table = ({ model }) => {
                   {column.header}
                 </th>
               ))}
-              <th className="py-2 px-3 font-medium">Action</th>
+              {actionButtons && (
+                <th className="py-2 px-3 font-medium">
+                  <div className="flex justify-center">Action</div>
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -33,7 +36,13 @@ const Table = ({ model }) => {
                     </div>
                   </td>
                 ))}
-                <td className="py-2 px-3">Delete</td>
+                {actionButtons && (
+                  <td className="py-2 px-3">
+                    <div className="flex gap-3 justify-center">
+                      {actionButtons({ record, index: i })}
+                    </div>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
