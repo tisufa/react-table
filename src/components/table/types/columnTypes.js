@@ -8,6 +8,7 @@
  * @typedef {Object} ColumnTypes
  * @property {string} header
  * @property {string} field
+ * @property {boolean} sortable // default true
  * @property {function({ record: any, value: any }): import("react").JSX.Element} component
  * @property {CallbacksTypes} callbacks
  */

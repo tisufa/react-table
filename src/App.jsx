@@ -24,6 +24,7 @@ function App() {
     {
       header: "Status",
       field: "isActive",
+      sortable: false,
       component: ({ value }) => {
         return (
           <small
