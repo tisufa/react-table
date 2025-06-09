@@ -1,4 +1,15 @@
 const Table = ({ model, actionButtons }) => {
+  const renderColumn = (record, column) => {
+    let value = null;
+    if (column.field) value = record[column.field];
+    return column.component
+      ? column.component({
+          record,
+          value,
+        })
+      : record[column.field];
+  };
+
   return (
     <div className="table-wrapper">
       <div className="table-header">{/* TODO: Add Filter/Search */}</div>
@@ -32,7 +43,7 @@ const Table = ({ model, actionButtons }) => {
                 {model.columns.map((column, j) => (
                   <td key={j} className="py-2 px-3">
                     <div className="whitespace-nowrap">
-                      {record[column.field]}
+                      {renderColumn(record, column)}
                     </div>
                   </td>
                 ))}
@@ -54,3 +65,4 @@ const Table = ({ model, actionButtons }) => {
 };
 
 export { Table };
+

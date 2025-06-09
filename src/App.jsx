@@ -24,6 +24,17 @@ function App() {
     {
       header: "Status",
       field: "isActive",
+      component: ({ value }) => {
+        return (
+          <small
+            className={`px-2 py-1 shadow-sm bg-slate-200 rounded-md font-medium text-slate-700 ${
+              value ? "!bg-lime-400 " : ""
+            }`}
+          >
+            {value ? "Aktif" : "Tidak Aktif"}
+          </small>
+        );
+      },
     },
   ]);
 
