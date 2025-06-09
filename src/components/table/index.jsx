@@ -1,1 +1,2 @@
-export * from './Table';
+export * from "./hooks/useTable";
+export * from "./Table";
