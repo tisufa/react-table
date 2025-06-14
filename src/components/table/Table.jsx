@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Pagination, usePagination } from "../pagination";
 import { InputSearch } from "./InputSearch";
 
 const Table = ({ model, actionButtons }) => {
@@ -9,16 +10,25 @@ const Table = ({ model, actionButtons }) => {
     order: "",
   });
 
+  const pagination = usePagination();
+
   useEffect(() => {
     resolveClientRecords();
-  }, [model.records, state.keywords, state.order, state.sort]);
+  }, [model.records, state.keywords, state.order, state.sort, pagination.page]);
 
   const resolveClientRecords = () => {
     let records = Array.from(model.records || []);
     // search table
     records = searchRecords(records);
+    pagination.setTotalRecord(records.length);
+
     // sort table
     records = sortRecords(records);
+
+    // pagination
+    const start = (pagination.page - 1) * pagination.perPage;
+    const end = start + pagination.perPage;
+    records = records.slice(start, end);
 
     setState((prev) => ({
       ...prev,
@@ -167,7 +177,9 @@ const Table = ({ model, actionButtons }) => {
                 className="text-left odd:bg-slate-100 hover:bg-slate-200 transition-all duration-300"
                 key={i + 1}
               >
-                <td className="py-2 px-3">{i + 1}</td>
+                <td className="py-2 px-3">
+                  {(pagination.page - 1) * pagination.perPage + i + 1}
+                </td>
                 {model.columns.map((column, j) => (
                   <td key={j} className="py-2 px-3">
                     <div className="whitespace-nowrap">
@@ -187,7 +199,9 @@ const Table = ({ model, actionButtons }) => {
           </tbody>
         </table>
       </div>
-      <div className="table-footer">{/* TODO: Add Pagination */}</div>
+      <div className="p-3 flex justify-end">
+        <Pagination model={pagination} />
+      </div>
     </div>
   );
 };

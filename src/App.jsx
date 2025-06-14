@@ -47,7 +47,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       tableUser.setRecords(users);
-    }, 2000);
+    }, 0);
   }, []);
 
   const handleView = (record) => {
@@ -63,8 +63,8 @@ function App() {
   };
 
   return (
-    <div className="h-screen p-5 justify-center bg-slate-200">
-      <div className="text-center w-full">
+    <div className="h-screen px-5 justify-center bg-slate-200">
+      <div className="text-center w-full py-5">
         <h1 className="font-semibold text-3xl">React Table</h1>
         <p className="mb-3">Create reusable react table from scratch</p>
         <div className="bg-white shadow-md rounded-md w-full mb-3">
