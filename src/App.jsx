@@ -1,54 +1,23 @@
-import { useEffect } from "react";
 import "./App.css";
 import { Table, useTable } from "./components";
-import { users } from "./data";
 
 function App() {
-  const tableUser = useTable("user", [
-    {
-      header: "Username",
-      field: "username",
-    },
-    {
-      header: "Name",
-      field: "name",
-    },
-    {
-      header: "Email",
-      field: "email",
-    },
-    {
-      header: "Phone Number",
-      field: "phoneNumber",
-    },
-    {
-      header: "Status",
-      field: "isActive",
-      sortable: false,
-      component: ({ value }) => {
-        return (
-          <small
-            className={`px-2 py-1 shadow-sm bg-slate-200 rounded-md font-medium text-slate-700 ${
-              value === "Aktif" ? "!bg-lime-400 " : ""
-            }`}
-          >
-            {value}
-          </small>
-        );
+  const tableUser = useTable(
+    "user",
+    [
+      {
+        header: "Title",
+        field: "title",
       },
-      callbacks: {
-        createValue: ({ record }) => {
-          return record.isActive ? "Aktif" : "Tidak Aktif";
-        },
+      {
+        header: "Body",
+        field: "body",
       },
-    },
-  ]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      tableUser.setRecords(users);
-    }, 0);
-  }, []);
+    ],
+    {
+      stringUrl: "https://jsonplaceholder.typicode.com/posts",
+    }
+  );
 
   const handleView = (record) => {
     console.log("ViewDetail", record);

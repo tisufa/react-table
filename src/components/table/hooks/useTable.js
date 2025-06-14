@@ -1,12 +1,13 @@
 import { useState } from "react";
-import '../types/columnTypes';
+import "../types/tableTypes";
 /**
  *
  * @param {string} moduleCode
  * @param {ColumnTypes[]} columns
+ * @param {TableOptionTypes} options
  * @returns
  */
-const useTable = (moduleCode, columns) => {
+const useTable = (moduleCode, columns, options) => {
   const [state, setState] = useState({
     records: [],
   });
@@ -18,7 +19,7 @@ const useTable = (moduleCode, columns) => {
     }));
   };
 
-  return { ...state, moduleCode, columns, setRecords };
+  return { ...state, moduleCode, columns, options, setRecords };
 };
 
 export { useTable };

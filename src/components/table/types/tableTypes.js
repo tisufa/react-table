@@ -12,3 +12,8 @@
  * @property {function({ record: any, value: any }): import("react").JSX.Element} component
  * @property {CallbacksTypes} callbacks
  */
+
+/**
+ * @typedef {Object} TableOptionTypes
+ * @property {string} stringUrl
+ */

@@ -6,6 +6,7 @@ const usePagination = (perPage = 10, size = 5) => {
     perPage,
     size,
     totalRecord: 0,
+    totalPage: 1,
   });
 
   const setPage = (page) => {

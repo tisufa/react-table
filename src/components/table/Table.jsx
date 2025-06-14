@@ -13,8 +13,45 @@ const Table = ({ model, actionButtons }) => {
   const pagination = usePagination();
 
   useEffect(() => {
-    resolveClientRecords();
+    model?.options?.stringUrl ? resolveServerRecords() : resolveClientRecords();
   }, [model.records, state.keywords, state.order, state.sort, pagination.page]);
+
+  const resolveServerRecords = async () => {
+    try {
+      const queryString = createQueryString();
+      const response = await fetch(`${model.options.stringUrl}?${queryString}`);
+      const records = await response.json();
+      pagination.setTotalRecord(+(response.headers.get("x-total-count") || 0));
+      setState((prev) => ({
+        ...prev,
+        records,
+      }));
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  const createQueryString = () => {
+    const requestDTO = {
+      _page: pagination.page,
+      _per_page: pagination.perPage,
+    };
+
+    if (state.sort) {
+      requestDTO["_sort"] = state.sort;
+      requestDTO["_order"] = state.order;
+    }
+
+    if (state.keywords) {
+      requestDTO["q"] = state.keywords;
+    }
+
+    const params = new URLSearchParams();
+    Object.keys(requestDTO).map((key) => {
+      params.append(key, requestDTO[key]);
+    });
+    return params.toString();
+  };
 
   const resolveClientRecords = () => {
     let records = Array.from(model.records || []);
@@ -99,6 +136,7 @@ const Table = ({ model, actionButtons }) => {
   };
 
   const handleSearch = (keywords) => {
+    pagination.setPage(1);
     setState((prev) => ({
       ...prev,
       keywords,
